@@ -67,6 +67,14 @@ public:
   }
 };
 
+template <class TInput, class TCoordinateType, class TOutput = TInput>
+std::function< TOutput(const ThreadIdType, double, const TCoordinateType, const TInput *, int) >
+InterpolationWeightMultiplication1 = [](const ThreadIdType    itkNotUsed(threadId),
+         double          itkNotUsed(stepLengthInVoxel),
+         const TCoordinateType weight,
+         const TInput *  p,
+         int             i) -> TOutput { return weight * p[i]; };
+
 /** \class SumAlongRay
  * \brief Function to compute the attenuation correction on the projection.
  *
@@ -102,6 +110,13 @@ public:
     sumValue += static_cast<TOutput>(volumeValue);
   }
 };
+
+template <class TInput, class TOutput, class VectorType = itk::Vector<double, 3> >
+std::function< void(const ThreadIdType, TOutput &, const TInput, const VectorType&) >
+SumAlongRay1 = [](const ThreadIdType itkNotUsed(threadId),
+         TOutput &          sumValue,
+         const TInput       volumeValue,
+         const VectorType & itkNotUsed(stepInMM)) { sumValue += static_cast<TOutput>(volumeValue); };
 
 /** \class ProjectedValueAccumulation
  * \brief Function to accumulate the ray casting on the projection.
@@ -144,6 +159,21 @@ public:
   }
 };
 
+template <class TInput, class TOutput, class VectorType = itk::Vector<double, 3> >
+std::function< void(const ThreadIdType, const TInput &, TOutput &, const TOutput &,
+  const VectorType&, const VectorType&, const VectorType&,
+  const VectorType&, const VectorType&) >
+ProjectedValueAccumulation1 = [](const ThreadIdType itkNotUsed(threadId),
+         const TInput &     input,
+         TOutput &          output,
+         const TOutput &    rayCastValue,
+         const VectorType& stepInMM,
+         const VectorType& itkNotUsed(source),
+         const VectorType& itkNotUsed(sourceToPixel),
+         const VectorType& itkNotUsed(nearestPoint),
+         const VectorType& itkNotUsed(farthestPoint)
+         ) { output = input + rayCastValue * stepInMM.GetNorm(); };
+
 } // end namespace Functor
 
 
@@ -185,9 +215,20 @@ public:
   using OutputPixelType = typename TOutputImage::PixelType;
   using OutputImageRegionType = typename TOutputImage::RegionType;
   using CoordinateType = double;
+  using WeightCoordinateType = typename itk::PixelTraits<InputPixelType>::ValueType;
   using VectorType = itk::Vector<CoordinateType, TInputImage::ImageDimension>;
   using TClipImageType = itk::Image<double, TOutputImage::ImageDimension>;
   using TClipImagePointer = typename TClipImageType::Pointer;
+  using InterpolationWeightMultiplicationFunc = std::function<
+    InputPixelType(const ThreadIdType, double,
+      const WeightCoordinateType, const InputPixelType *, int) >;
+  using SumAlongRayFunc = std::function<
+    void(const ThreadIdType, OutputPixelType &, const InputPixelType,
+      const VectorType&) >;
+  using ProjectedValueAccumulationFunc = std::function<
+    void(const ThreadIdType, const InputPixelType &, OutputPixelType &,
+      const OutputPixelType &, const VectorType&, const VectorType&,
+      const VectorType&, const VectorType&, const VectorType&) >;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);
@@ -343,6 +384,13 @@ protected:
 
 private:
   // Functors
+  InterpolationWeightMultiplicationFunc m_InterpolationWeightMultiplication1 =
+    Functor::InterpolationWeightMultiplication1< InputPixelType, WeightCoordinateType >;
+  SumAlongRayFunc m_SumAlongRay1 =
+    Functor::SumAlongRay1< InputPixelType, OutputPixelType >;
+  ProjectedValueAccumulationFunc m_ProjectedValueAccumulation1 =
+    Functor::ProjectedValueAccumulation1< InputPixelType, OutputPixelType >;
+
   TInterpolationWeightMultiplication m_InterpolationWeightMultiplication;
   TProjectedValueAccumulation        m_ProjectedValueAccumulation;
   TSumAlongRay                       m_SumAlongRay;

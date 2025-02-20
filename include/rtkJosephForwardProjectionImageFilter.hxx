@@ -42,6 +42,7 @@ JosephForwardProjectionImageFilter<TInputImage,
                                    TProjectedValueAccumulation,
                                    TSumAlongRay>::JosephForwardProjectionImageFilter()
 {
+//  m_InterpolationWeightMultiplication1 = rtk::Functor::InterpolationWeightMultiplication1< typename TInputImage::PixelType, typename itk::PixelTraits<typename TInputImage::PixelType>::ValueType >;
   this->DynamicMultiThreadingOff();
 }
 
