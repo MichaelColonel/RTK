@@ -257,6 +257,24 @@ public:
     }
   }
 
+  /** Get/Set the lambda function that is used to multiply each interpolation value with a volume value */
+  InterpolationWeightMultiplicationFunc &
+  GetInterpolationWeightMultiplication1()
+  {
+    return m_InterpolationWeightMultiplication1;
+  }
+  const InterpolationWeightMultiplicationFunc &
+  GetInterpolationWeightMultiplication1() const
+  {
+    return m_InterpolationWeightMultiplication1;
+  }
+  void
+  SetInterpolationWeightMultiplication1(const InterpolationWeightMultiplicationFunc & _arg)
+  {
+    m_InterpolationWeightMultiplication1 = _arg;
+    this->Modified();
+  }
+
   /** Get/Set the functor that is used to accumulate values in the projection image after the ray
    * casting has been performed. */
   TProjectedValueAccumulation &
@@ -298,6 +316,24 @@ public:
       m_SumAlongRay = _arg;
       this->Modified();
     }
+  }
+
+  /** Get/Set the lambda function that is used to compute the sum along the ray */
+  SumAlongRayFunc &
+  GetSumAlongRay1()
+  {
+    return m_SumAlongRay1;
+  }
+  const SumAlongRayFunc &
+  GetSumAlongRay1() const
+  {
+    return m_SumAlongRay1;
+  }
+  void
+  SetSumAlongRay1(const SumAlongRayFunc & _arg)
+  {
+    m_SumAlongRay1 = _arg;
+    this->Modified();
   }
 
   /** Set/Get the inferior clip image. Each pixel of the image

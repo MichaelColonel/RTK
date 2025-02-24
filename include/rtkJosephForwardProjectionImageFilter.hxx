@@ -352,7 +352,7 @@ JosephForwardProjectionImageFilter<TInputImage,
                                                      miny,
                                                      maxx,
                                                      maxy);
-        m_SumAlongRay(threadId, sum, volumeValue, stepMM);
+        m_SumAlongRay1(threadId, sum, volumeValue, stepMM);
       }
       else
       {
@@ -371,7 +371,7 @@ JosephForwardProjectionImageFilter<TInputImage,
                                                      miny,
                                                      maxx,
                                                      maxy);
-        m_SumAlongRay(threadId, sum, volumeValue, stepMM);
+        m_SumAlongRay1(threadId, sum, volumeValue, stepMM);
 
         // Move to next main direction slice
         pxiyi += offsetz;
@@ -386,7 +386,7 @@ JosephForwardProjectionImageFilter<TInputImage,
         {
           volumeValue =
             BilinearInterpolation(threadId, 1., pxiyi, pxsyi, pxiys, pxsys, currentx, currenty, offsetx, offsety);
-          m_SumAlongRay(threadId, sum, volumeValue, stepMM);
+          m_SumAlongRay1(threadId, sum, volumeValue, stepMM);
 
           // Move to next main direction slice
           pxiyi += offsetz;
@@ -412,13 +412,13 @@ JosephForwardProjectionImageFilter<TInputImage,
                                                      miny,
                                                      maxx,
                                                      maxy);
-        m_SumAlongRay(threadId, sum, volumeValue, stepMM);
+        m_SumAlongRay1(threadId, sum, volumeValue, stepMM);
       }
       // Accumulate
-      m_ProjectedValueAccumulation(threadId, itIn->Get(), itOut.Value(), sum, stepMM, pixelPosition, dirVox, np, fp);
+      m_ProjectedValueAccumulation1(threadId, itIn->Get(), itOut.Value(), sum, stepMM, pixelPosition, dirVox, np, fp);
     }
     else
-      m_ProjectedValueAccumulation(
+      m_ProjectedValueAccumulation1(
         threadId, itIn->Get(), itOut.Value(), {}, pixelPosition, pixelPosition, dirVox, pixelPosition, pixelPosition);
   }
   delete itIn;
@@ -456,10 +456,10 @@ JosephForwardProjectionImageFilter<TInputImage,
   CoordinateType ly = y - iy;
   CoordinateType lxc = 1. - lx;
   CoordinateType lyc = 1. - ly;
-  return (m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lxc * lyc, pxiyi, idx) +
-          m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lx * lyc, pxsyi, idx) +
-          m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lxc * ly, pxiys, idx) +
-          m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lx * ly, pxsys, idx));
+  return (m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lxc * lyc, pxiyi, idx) +
+          m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lx * lyc, pxsyi, idx) +
+          m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lxc * ly, pxiys, idx) +
+          m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lx * ly, pxsys, idx));
   /* Alternative slower solution
   const unsigned int   ix = itk::Math::Floor(x);
   const unsigned int   iy = itk::Math::Floor(y);
@@ -527,13 +527,13 @@ JosephForwardProjectionImageFilter<TInputImage,
     offset_ys = -oy;
 
   result +=
-    m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lxc * lyc, pxiyi, idx + offset_xi + offset_yi);
+    m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lxc * lyc, pxiyi, idx + offset_xi + offset_yi);
   result +=
-    m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lxc * ly, pxiys, idx + offset_xi + offset_ys);
+    m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lxc * ly, pxiys, idx + offset_xi + offset_ys);
   result +=
-    m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lx * lyc, pxsyi, idx + offset_xs + offset_yi);
+    m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lx * lyc, pxsyi, idx + offset_xs + offset_yi);
   result +=
-    m_InterpolationWeightMultiplication(threadId, stepLengthInVoxel, lx * ly, pxsys, idx + offset_xs + offset_ys);
+    m_InterpolationWeightMultiplication1(threadId, stepLengthInVoxel, lx * ly, pxsys, idx + offset_xs + offset_ys);
 
   result *= stepLengthInVoxel;
 

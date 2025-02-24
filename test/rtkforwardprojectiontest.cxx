@@ -1,4 +1,5 @@
 #include "rtkTest.h"
+
 #include "rtkThreeDCircularProjectionGeometryXMLFile.h"
 #include "rtkRayBoxIntersectionImageFilter.h"
 #include "rtkSheppLoganPhantomFilter.h"
@@ -97,6 +98,14 @@ main(int, char **)
   jfp->InPlaceOff();
   jfp->SetInput(projInput->GetOutput());
   jfp->SetInput(1, volInput->GetOutput());
+
+#ifndef USE_CUDA
+  JFPType::SumAlongRayFunc summFunc2 = [](const itk::ThreadIdType, JFPType::OutputPixelType &sum, const JFPType::InputPixelType in,
+      const JFPType::VectorType&) {
+     sum += static_cast<JFPType::OutputPixelType>(in);
+  };
+  jfp->SetSumAlongRay1(summFunc2);
+#endif
 
   // Ray Box Intersection filter (reference)
   using RBIType = rtk::RayBoxIntersectionImageFilter<OutputImageType, OutputImageType>;
