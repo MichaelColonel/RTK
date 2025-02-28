@@ -40,7 +40,7 @@ namespace Functor
  * \ingroup RTK Functions
  */
 template <class TInput, class TCoordinateType, class TOutput = TInput>
-std::function< TOutput(const ThreadIdType, double, const TCoordinateType, const TInput *, int) >
+std::function<TOutput(const ThreadIdType, double, const TCoordinateType, const TInput *, int)>
   InterpolationWeightMultiplication = [](const ThreadIdType    itkNotUsed(threadId),
                                          double                itkNotUsed(stepLengthInVoxel),
                                          const TCoordinateType weight,
@@ -55,7 +55,7 @@ std::function< TOutput(const ThreadIdType, double, const TCoordinateType, const 
  * \ingroup RTK Functions
  */
 template <class TInput, class TOutput, class VectorType = itk::Vector<double, 3>>
-std::function<void(const ThreadIdType, TOutput &, const TInput, const VectorType&)> SumAlongRay =
+std::function<void(const ThreadIdType, TOutput &, const TInput, const VectorType &)> SumAlongRay =
   [](const ThreadIdType itkNotUsed(threadId),
      TOutput &          sumValue,
      const TInput       volumeValue,
@@ -129,16 +129,16 @@ public:
   using InterpolationWeightMultiplicationFunc =
     std::function<InputPixelType(const ThreadIdType, double, const WeightCoordinateType, const InputPixelType *, int)>;
   using SumAlongRayFunc =
-    std::function<void(const ThreadIdType, OutputPixelType &, const InputPixelType, const VectorType&)>;
+    std::function<void(const ThreadIdType, OutputPixelType &, const InputPixelType, const VectorType &)>;
   using ProjectedValueAccumulationFunc = std::function<void(const ThreadIdType,
                                                             const InputPixelType &,
                                                             OutputPixelType &,
                                                             const OutputPixelType &,
-                                                            const VectorType&,
-                                                            const VectorType&,
-                                                            const VectorType&,
-                                                            const VectorType&,
-                                                            const VectorType&)>;
+                                                            const VectorType &,
+                                                            const VectorType &,
+                                                            const VectorType &,
+                                                            const VectorType &,
+                                                            const VectorType &)>;
 
   /** Method for creation through the object factory. */
   itkNewMacro(Self);

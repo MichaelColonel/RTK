@@ -86,8 +86,8 @@ main(int, char **)
   jfp->SetInput(1, volInput->GetOutput());
   /*
     // custom SumAlongRay lambda function
-    JFPType::SumAlongRayFunc sumFuncTest = [](const itk::ThreadIdType, JFPType::OutputPixelType &sum, const JFPType::InputPixelType in,
-      const itk::Vector<double, 3>&) -> void
+    JFPType::SumAlongRayFunc sumFuncTest = [](const itk::ThreadIdType, JFPType::OutputPixelType &sum, const
+    JFPType::InputPixelType in, const itk::Vector<double, 3> &) -> void
     {
       sum += static_cast<JFPType::OutputPixelType>(in);
     };

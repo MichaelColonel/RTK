@@ -80,7 +80,7 @@ main(int, char **)
   MIPType::SumAlongRayFunc sumAlongFunc = [](const itk::ThreadIdType,
                                              MIPType::OutputPixelType &    mipValue,
                                              const MIPType::InputPixelType volumeValue,
-                                             const itk::Vector<double, 3>&) -> void {
+                                             const itk::Vector<double, 3> &) -> void {
     MIPType::OutputPixelType tmp = static_cast<MIPType::OutputPixelType>(volumeValue);
     if (tmp > mipValue)
     {
@@ -91,7 +91,7 @@ main(int, char **)
 
   // Performs a MIP forward projection, i.e. calculation of a maximum intensity
   // step along the x-ray line.
-  MIPType::ProjectedValueAccumulationFunc projAccumFunc = [](const itk::ThreadIdType itkNotUsed(threadId),
+  MIPType::ProjectedValueAccumulationFunc projAccumFunc = [](const itk::ThreadIdType          itkNotUsed(threadId),
                                                              const MIPType::InputPixelType &  input,
                                                              MIPType::OutputPixelType &       output,
                                                              const MIPType::OutputPixelType & rayCastValue,
