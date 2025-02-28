@@ -73,11 +73,11 @@ std::function<void(const ThreadIdType,
                    const TInput &,
                    TOutput &,
                    const TOutput &,
-                   const VectorType&,
-                   const VectorType&,
-                   const VectorType&,
-                   const VectorType&,
-                   const VectorType&)>
+                   const VectorType &,
+                   const VectorType &,
+                   const VectorType &,
+                   const VectorType &,
+                   const VectorType &)>
   ProjectedValueAccumulation =
     [](const ThreadIdType itkNotUsed(threadId),
        const TInput &     input,
