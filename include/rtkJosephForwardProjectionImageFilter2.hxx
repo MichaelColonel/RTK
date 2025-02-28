@@ -32,8 +32,7 @@ namespace rtk
 {
 
 template <class TInputImage, class TOutputImage>
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::JosephForwardProjectionImageFilter2()
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::JosephForwardProjectionImageFilter2()
 {
   this->DynamicMultiThreadingOff();
 }
@@ -41,8 +40,7 @@ JosephForwardProjectionImageFilter2<TInputImage,
 
 template <class TInputImage, class TOutputImage>
 void
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::GenerateInputRequestedRegion()
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::GenerateInputRequestedRegion()
 {
   Superclass::GenerateInputRequestedRegion();
 
@@ -66,8 +64,7 @@ JosephForwardProjectionImageFilter2<TInputImage,
 
 template <class TInputImage, class TOutputImage>
 void
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::VerifyInputInformation() const
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::VerifyInputInformation() const
 {
   using ImageBaseType = const itk::ImageBase<TInputImage::ImageDimension>;
 
@@ -150,9 +147,9 @@ JosephForwardProjectionImageFilter2<TInputImage,
 
 template <class TInputImage, class TOutputImage>
 void
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::ThreadedGenerateData(const OutputImageRegionType &outputRegionForThread,
-                                                                        ThreadIdType threadId)
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::ThreadedGenerateData(
+  const OutputImageRegionType & outputRegionForThread,
+  ThreadIdType                  threadId)
 {
   const unsigned int Dimension = TInputImage::ImageDimension;
   int                offsets[3];
@@ -396,17 +393,16 @@ JosephForwardProjectionImageFilter2<TInputImage,
 
 template <class TInputImage, class TOutputImage>
 typename JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::OutputPixelType
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::BilinearInterpolation(const ThreadIdType     threadId,
-                                                                         const double           stepLengthInVoxel,
-                                                                         const InputPixelType * pxiyi,
-                                                                         const InputPixelType * pxsyi,
-                                                                         const InputPixelType * pxiys,
-                                                                         const InputPixelType * pxsys,
-                                                                         const CoordinateType   x,
-                                                                         const CoordinateType   y,
-                                                                         const int              ox,
-                                                                         const int              oy)
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::BilinearInterpolation(const ThreadIdType threadId,
+                                                                                      const double stepLengthInVoxel,
+                                                                                      const InputPixelType * pxiyi,
+                                                                                      const InputPixelType * pxsyi,
+                                                                                      const InputPixelType * pxiys,
+                                                                                      const InputPixelType * pxsys,
+                                                                                      const CoordinateType   x,
+                                                                                      const CoordinateType   y,
+                                                                                      const int              ox,
+                                                                                      const int              oy)
 {
   int            ix = itk::Math::floor(x);
   int            iy = itk::Math::floor(y);
@@ -435,21 +431,21 @@ JosephForwardProjectionImageFilter2<TInputImage,
 
 template <class TInputImage, class TOutputImage>
 typename JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::OutputPixelType
-JosephForwardProjectionImageFilter2<TInputImage,
-                                    TOutputImage>::BilinearInterpolationOnBorders(const ThreadIdType threadId,
-                                                                                  const double       stepLengthInVoxel,
-                                                                                  const InputPixelType * pxiyi,
-                                                                                  const InputPixelType * pxsyi,
-                                                                                  const InputPixelType * pxiys,
-                                                                                  const InputPixelType * pxsys,
-                                                                                  const CoordinateType   x,
-                                                                                  const CoordinateType   y,
-                                                                                  const int              ox,
-                                                                                  const int              oy,
-                                                                                  const CoordinateType   minx,
-                                                                                  const CoordinateType   miny,
-                                                                                  const CoordinateType   maxx,
-                                                                                  const CoordinateType   maxy)
+JosephForwardProjectionImageFilter2<TInputImage, TOutputImage>::BilinearInterpolationOnBorders(
+  const ThreadIdType     threadId,
+  const double           stepLengthInVoxel,
+  const InputPixelType * pxiyi,
+  const InputPixelType * pxsyi,
+  const InputPixelType * pxiys,
+  const InputPixelType * pxsys,
+  const CoordinateType   x,
+  const CoordinateType   y,
+  const int              ox,
+  const int              oy,
+  const CoordinateType   minx,
+  const CoordinateType   miny,
+  const CoordinateType   maxx,
+  const CoordinateType   maxy)
 {
   int            ix = itk::Math::floor(x);
   int            iy = itk::Math::floor(y);

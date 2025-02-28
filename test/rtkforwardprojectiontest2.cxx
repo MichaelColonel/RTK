@@ -84,15 +84,15 @@ main(int, char **)
   jfp->InPlaceOff();
   jfp->SetInput(projInput->GetOutput());
   jfp->SetInput(1, volInput->GetOutput());
-/*
-  // custom SumAlongRay lambda function
-  JFPType::SumAlongRayFunc sumFuncTest = [](const itk::ThreadIdType, JFPType::OutputPixelType &sum, const JFPType::InputPixelType in,
-    const itk::Vector<double, 3>&) -> void
-  {
-    sum += static_cast<JFPType::OutputPixelType>(in);
-  };
-  jfp->SetSumAlongRay(sumFuncTest);
-*/
+  /*
+    // custom SumAlongRay lambda function
+    JFPType::SumAlongRayFunc sumFuncTest = [](const itk::ThreadIdType, JFPType::OutputPixelType &sum, const JFPType::InputPixelType in,
+      const itk::Vector<double, 3>&) -> void
+    {
+      sum += static_cast<JFPType::OutputPixelType>(in);
+    };
+    jfp->SetSumAlongRay(sumFuncTest);
+  */
   // Ray Box Intersection filter (reference)
   using RBIType = rtk::RayBoxIntersectionImageFilter<OutputImageType, OutputImageType>;
   RBIType::Pointer rbi = RBIType::New();

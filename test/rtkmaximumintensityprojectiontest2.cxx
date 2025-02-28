@@ -77,9 +77,10 @@ main(int, char **)
   mipfp->SetInput(1, volInput->GetOutput());
 
   // Function to compute the maximum intensity (MIP) value along the ray projection.
-  MIPType::SumAlongRayFunc sumAlongFunc = [](const itk::ThreadIdType, MIPType::OutputPixelType &mipValue,
-    const MIPType::InputPixelType volumeValue, const itk::Vector<double, 3>&) -> void
-  {
+  MIPType::SumAlongRayFunc sumAlongFunc = [](const itk::ThreadIdType,
+                                             MIPType::OutputPixelType &    mipValue,
+                                             const MIPType::InputPixelType volumeValue,
+                                             const itk::Vector<double, 3>&) -> void {
     MIPType::OutputPixelType tmp = static_cast<MIPType::OutputPixelType>(volumeValue);
     if (tmp > mipValue)
     {
@@ -91,22 +92,21 @@ main(int, char **)
   // Performs a MIP forward projection, i.e. calculation of a maximum intensity
   // step along the x-ray line.
   MIPType::ProjectedValueAccumulationFunc projAccumFunc = [](const itk::ThreadIdType itkNotUsed(threadId),
-    const MIPType::InputPixelType &     input,
-    MIPType::OutputPixelType &          output,
-    const MIPType::OutputPixelType &    rayCastValue,
-    const itk::Vector<double, 3>& stepInMM,
-    const itk::Vector<double, 3>& itkNotUsed(source),
-    const itk::Vector<double, 3>& itkNotUsed(sourceToPixel),
-    const itk::Vector<double, 3>& itkNotUsed(nearestPoint),
-    const itk::Vector<double, 3>& itkNotUsed(farthestPoint))
+                                                             const MIPType::InputPixelType &  input,
+                                                             MIPType::OutputPixelType &       output,
+                                                             const MIPType::OutputPixelType & rayCastValue,
+                                                             const itk::Vector<double, 3> &   stepInMM,
+                                                             const itk::Vector<double, 3> &   itkNotUsed(source),
+                                                             const itk::Vector<double, 3> &   itkNotUsed(sourceToPixel),
+                                                             const itk::Vector<double, 3> &   itkNotUsed(nearestPoint),
+                                                             const itk::Vector<double, 3> & itkNotUsed(farthestPoint)) {
+    MIPType::OutputPixelType tmp = static_cast<MIPType::OutputPixelType>(input);
+    if (tmp < rayCastValue)
     {
-      MIPType::OutputPixelType tmp = static_cast<MIPType::OutputPixelType>(input);
-      if (tmp < rayCastValue)
-      {
-        tmp = rayCastValue;
-      }
-      output = tmp * stepInMM.GetNorm();
-    };
+      tmp = rayCastValue;
+    }
+    output = tmp * stepInMM.GetNorm();
+  };
   mipfp->SetProjectedValueAccumulation(projAccumFunc);
 
   using GeometryType = rtk::ThreeDCircularProjectionGeometry;
